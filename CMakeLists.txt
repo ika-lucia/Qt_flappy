@@ -19,6 +19,10 @@ set(PROJECT_SOURCES
         widget.ui
         scene.cpp
         scene.h
+        bird.cpp
+        bird.h
+        pipe.cpp
+        pipe.h
         assets/Resource.qrc
 )
 
