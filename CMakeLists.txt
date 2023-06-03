@@ -24,6 +24,8 @@ set(PROJECT_SOURCES
         pipe.cpp
         pipe.h
         assets/Resource.qrc
+        pillaritem.cpp
+        pillaritem.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -64,7 +66,6 @@ install(TARGETS flappy_bird
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(flappy_bird)
 endif()
