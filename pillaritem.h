@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QGraphicsItemGroup>
 #include <QGraphicsPixmapItem>
+#include <QPropertyAnimation>
 class PillarItem : public QObject,public QGraphicsItemGroup
 {
     Q_OBJECT
@@ -16,6 +17,7 @@ public:
     void Animate();
     qreal x() const;
     void setX(qreal newX);
+    ~PillarItem();
 
 signals:
     void xChanged();
@@ -26,6 +28,7 @@ private:
     QGraphicsPixmapItem* qpillardown;
     QPropertyAnimation* xAnimation;
     qreal m_x;
+    qreal m_y;
 };
 
 #endif // PILLARITEM_H
