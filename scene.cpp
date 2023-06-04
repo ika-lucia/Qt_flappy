@@ -31,9 +31,7 @@ void Scene::addBird() {
 
 void Scene::gameOver() {
     // if already fail, don't restart falling
-    if (stopped) {
-        return;
-    }
+    if (stopped) return;
     bird->failFall();
     // stop pillar generation
     pillarTimer->stop();
@@ -45,11 +43,17 @@ void Scene::gameOver() {
             pil->freeze();
         }
     }
+    auto after_scale = QPixmap(":/graphics/gameOver.png");
+    QGraphicsPixmapItem* gameOverTxt = new QGraphicsPixmapItem(after_scale);
+    gameOverTxt->setPos(QPointF(0,0) - QPointF(gameOverTxt->boundingRect().width()/2,
+                                               gameOverTxt->boundingRect().height()/2));
+    addItem((gameOverTxt));
     stopped = true;
 }
 
 // bird up when pressing space
 void Scene::keyPressEvent(QKeyEvent* event) {
+    if (stopped)    return;
     qDebug() << "Key pressed";
     if (event->key() == Qt::Key_Space) {
         bird->up();
