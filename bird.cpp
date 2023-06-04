@@ -104,3 +104,13 @@ void Bird::fall() {
     rotateTo(90, 1200, QEasingCurve::InQuad);
 }
 
+void Bird::failFall() {
+    yAnimation->stop();
+    yAnimation->setStartValue(y());
+    yAnimation->setEndValue(groundPosition);
+    yAnimation->setEasingCurve(QEasingCurve::InQuad);
+    yAnimation->setDuration(300);
+    yAnimation->start();
+    rotateTo(90, 60, QEasingCurve::Linear);
+}
+

@@ -8,9 +8,11 @@ class Scene: public QGraphicsScene {
     Q_OBJECT
 public:
     explicit Scene(QObject *parent = nullptr);
+    bool stopped;
     QTimer* pillarTimer = new QTimer(this);
     void addNewPillar();
     void addBird();
+    void gameOver();
     void keyPressEvent(QKeyEvent* event);
     Bird* bird;
 };

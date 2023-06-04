@@ -17,9 +17,11 @@ public:
     void Animate();
     qreal x() const;
     void setX(qreal newX);
+    void freeze();
     ~PillarItem();
 
 signals:
+    void collided_signal();
     void xChanged();
 
 public slots:
@@ -27,6 +29,7 @@ private:
     QGraphicsPixmapItem* qpillarup;
     QGraphicsPixmapItem* qpillardown;
     QPropertyAnimation* xAnimation;
+    bool collide();
     qreal m_x;
     qreal m_y;
 };

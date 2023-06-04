@@ -22,12 +22,14 @@ public:
 
     void rotateTo(const qreal & end, const int & duration, const QEasingCurve & curve);
     void up();
+    void fall();
+    // fall down fast when fail
+    void failFall();
 signals:
 
 public slots:
 private:
     void updatePixmap();
-    void fall();
     // change between positions to simulate wing flapping
     enum WingPosition{
         Up,

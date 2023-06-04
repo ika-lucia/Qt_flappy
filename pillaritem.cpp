@@ -3,6 +3,7 @@
 #include <iostream>
 #include <QRandomGenerator>
 #include <QGraphicsScene>
+#include "bird.h"
 
 PillarItem::PillarItem(int gapWidth, int gapHeight) // pipe_down是开口朝下的，放在上方
 {
@@ -49,11 +50,30 @@ qreal PillarItem::x() const
     return m_x;
 }
 
+bool PillarItem::collide() {
+    QList<QGraphicsItem *> items = qpillardown->collidingItems() ;
+    items.append((qpillarup)->collidingItems());
+    foreach(QGraphicsItem * i , items)
+    {
+        Bird * b = dynamic_cast<Bird *>(i);
+        if (b) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void PillarItem::setX(qreal newX)
 {
     if (qFuzzyCompare(m_x, newX))
         return;
     m_x = newX;
     setPos(QPointF(m_x, m_y));
-    emit xChanged();
+    if (PillarItem::collide()) {
+        emit collided_signal();
+    }
+}
+
+void PillarItem::freeze() {
+    xAnimation->stop();
 }
