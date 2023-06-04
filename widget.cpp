@@ -3,6 +3,7 @@
 #include<QGraphicsPixmapItem>
 #include <QPropertyAnimation>
 #include <iostream>
+#include "bird.h"
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
@@ -24,6 +25,8 @@ Widget::Widget(QWidget *parent)
 
     scene->addLine(-400,0,400,0,QPen(Qt::blue));
     scene->addLine(0,-300,0,300,QPen(Qt::blue));
+    Bird* bird = new Bird();
+    scene->addItem(bird);
 
 }
 
