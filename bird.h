@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include <QPropertyAnimation>
+#include <QKeyEvent>
 
 class Bird : public QObject, public QGraphicsPixmapItem
 {
@@ -20,17 +21,20 @@ public:
     void setY(qreal newY);
 
     void rotateTo(const qreal & end, const int & duration, const QEasingCurve & curve);
-
+    void up();
 signals:
 
 public slots:
 private:
     void updatePixmap();
+    void fall();
+    // change between positions to simulate wing flapping
     enum WingPosition{
         Up,
         Middle,
         Down
     };
+    // currently going up or falling down
 
     WingPosition wingPosition;
     bool wingDirection;
@@ -39,6 +43,7 @@ private:
     QPropertyAnimation * yAnimation;
     QPropertyAnimation * rotationAnimation;
     qreal groundPosition;
+protected:
 };
 
 #endif // BIRD_H

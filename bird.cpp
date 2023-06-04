@@ -1,5 +1,6 @@
 #include "bird.h"
 #include <QTimer>
+#include <QDebug>
 
 Bird::Bird():
     wingPosition(WingPosition::Up),
@@ -15,15 +16,8 @@ Bird::Bird():
 
     groundPosition = scenePos().y() + 290;
     yAnimation = new QPropertyAnimation(this, "y", this);
-    yAnimation->setStartValue(scenePos().y());
-    yAnimation->setEndValue(groundPosition);
-    yAnimation->setEasingCurve(QEasingCurve::InQuad);
-    yAnimation->setDuration(1000);
-
-    yAnimation->start();
-
     rotationAnimation = new QPropertyAnimation(this, "rotation", this);
-    rotateTo(90, 1200, QEasingCurve::InQuad);
+    fall();
 }
 void Bird::updatePixmap()
 {
@@ -79,9 +73,34 @@ void Bird::setY(qreal newY)
 
 void Bird::rotateTo(const qreal &end, const int &duration, const QEasingCurve &curve)
 {
+    rotationAnimation->stop();
     rotationAnimation->setStartValue(rotation());
     rotationAnimation->setEndValue(end);
     rotationAnimation->setEasingCurve(curve);
     rotationAnimation->setDuration(duration);
     rotationAnimation->start();
 }
+
+
+
+void Bird::up() {
+    yAnimation->stop();
+    rotateTo(-30, 120, QEasingCurve::InQuad);
+    yAnimation->setStartValue(y());
+    yAnimation->setEndValue(y()-100);
+    yAnimation->setEasingCurve(QEasingCurve::InQuad);
+    yAnimation->setDuration(200);
+    connect(yAnimation, &QPropertyAnimation::finished, this, &Bird::fall);
+    yAnimation->start();
+}
+
+void Bird::fall() {
+    yAnimation->stop();
+    yAnimation->setStartValue(y());
+    yAnimation->setEndValue(groundPosition);
+    yAnimation->setEasingCurve(QEasingCurve::InQuad);
+    yAnimation->setDuration(1000);
+    yAnimation->start();
+    rotateTo(90, 1200, QEasingCurve::InQuad);
+}
+
