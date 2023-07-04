@@ -1,12 +1,14 @@
 #include "bird.h"
+#include "qgraphicsscene.h"
 #include <QTimer>
 #include <QDebug>
-
+#include "constants.cpp"
 Bird::Bird():
     wingPosition(WingPosition::Up),
     wingDirection(0)
 {
     setPixmap(QPixmap(":/graphics/bird_blue_up.png"));
+    setPos(QPointF(-WINDOW_WIDTH/4,0));
     QTimer * birdWingsTimer = new QTimer(this);
     connect(birdWingsTimer, &QTimer::timeout,
             [=](){
@@ -14,10 +16,20 @@ Bird::Bird():
     });
     birdWingsTimer->start(80);
 
-    groundPosition = scenePos().y() + 290;
+    groundPosition = WINDOW_HEIGHT/2;
+    qDebug()<<"groundPosition:"<<groundPosition;
     yAnimation = new QPropertyAnimation(this, "y", this);
     rotationAnimation = new QPropertyAnimation(this, "rotation", this);
-    fall();
+
+}
+Bird::~Bird(){
+    scene()->removeItem(this);
+    delete yAnimation;
+    delete rotationAnimation;
+}
+void Bird::stop(){
+    yAnimation->stop();
+    rotationAnimation->stop();
 }
 void Bird::updatePixmap()
 {

@@ -3,19 +3,22 @@
 #include<QGraphicsPixmapItem>
 #include <QPropertyAnimation>
 #include <iostream>
-#include "bird.h"
+
+#include "constants.h"
+
+
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
 
-    this->setFixedHeight(600);
-    this->setFixedWidth(400);
+    this->setFixedHeight(WINDOW_HEIGHT);
+    this->setFixedWidth(WINDOW_WIDTH);
     scene = new Scene(this);
-    scene->setSceneRect(-200, -300, 400, 600);
+    scene->setSceneRect(-WINDOW_WIDTH/2, -WINDOW_HEIGHT/2,
+                        WINDOW_WIDTH, WINDOW_HEIGHT);
     ui->graphicsView->setScene(scene);
-
 }
 
 Widget::~Widget()

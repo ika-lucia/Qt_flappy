@@ -4,9 +4,11 @@
 #include <QRandomGenerator>
 #include <QGraphicsScene>
 #include "bird.h"
-
-PillarItem::PillarItem(int gapWidth, int gapHeight) // pipe_down是开口朝下的，放在上方
+#include "constants.h"
+PillarItem::PillarItem() // pipe_down是开口朝下的，放在上方
 {
+    int gapWidth=GAP_WIDTH;
+    int gapHeight=GAP_HEIGHT;
     QPixmap pm = QPixmap(":/graphics/pipe_down.png");
     pm = pm.scaled(QSize(gapWidth,pm.height())); // 增大宽度
     qpillarup = new QGraphicsPixmapItem(pm);
@@ -14,7 +16,7 @@ PillarItem::PillarItem(int gapWidth, int gapHeight) // pipe_down是开口朝下�
     pm = pm.scaled(QSize(gapWidth,pm.height())); // 增大宽度
     qpillardown = new QGraphicsPixmapItem(pm);
 
-    //int width = qpillarup->boundingRect().width();
+    int width = qpillarup->boundingRect().width();
     int height= qpillarup->boundingRect().height();
 
     qpillarup -> setPos(-QPointF(gapWidth / 2,
@@ -24,18 +26,20 @@ PillarItem::PillarItem(int gapWidth, int gapHeight) // pipe_down是开口朝下�
     addToGroup(qpillarup);
     addToGroup(qpillardown);
     //random y position
-    m_y = -75+QRandomGenerator::global()->bounded(150);
+    yPos = -75+QRandomGenerator::global()->bounded(-RANGE_Y,RANGE_Y);
+    int xPos = QRandomGenerator::global()->bounded(-RANGE_X,RANGE_X);
+
+    int start = WINDOW_WIDTH+xPos+width/2;
+    int end = -WINDOW_WIDTH-width/2;
 
     // begin animation
     xAnimation = new QPropertyAnimation(this,"x",this);
-    xAnimation->setStartValue(200);
-    xAnimation->setEndValue(-200);
+    xAnimation->setStartValue(start);
+    xAnimation->setEndValue(end);
     xAnimation->setEasingCurve(QEasingCurve::Linear);
-    xAnimation->setDuration(2000);
+    xAnimation->setDuration((start-end)/(double)SPEED*1000);
     // when done, delete this item to avoid memory leak
-    connect(xAnimation, &QPropertyAnimation::finished, [=](){
-        delete this;
-    });
+
     xAnimation->start();
 }
 
@@ -68,7 +72,7 @@ void PillarItem::setX(qreal newX)
     if (qFuzzyCompare(m_x, newX))
         return;
     m_x = newX;
-    setPos(QPointF(m_x, m_y));
+    setPos(QPointF(m_x, yPos));
     if (PillarItem::collide()) {
         emit collided_signal();
     }

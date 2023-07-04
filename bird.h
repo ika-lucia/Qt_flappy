@@ -13,7 +13,7 @@ class Bird : public QObject, public QGraphicsPixmapItem
     Q_PROPERTY(qreal y READ y WRITE setY)
 public:
     explicit Bird();
-
+    ~Bird();
     qreal rotation() const;
     void setRotation(qreal newRotation);
 
@@ -23,6 +23,7 @@ public:
     void rotateTo(const qreal & end, const int & duration, const QEasingCurve & curve);
     void up();
     void fall();
+    void stop();
     // fall down fast when fail
     void failFall();
 signals:
