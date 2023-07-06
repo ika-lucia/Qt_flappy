@@ -11,7 +11,10 @@ int SPEED ; // pix / second
 int DISTANCE; // distence(px) between 2 neighboring pillars
 int COIN_INTV_L; // lower bound on coin appear time
 int COIN_INTV_H; // upper bound on coin appear time
-
+int BAT_V_INTV;
+double BAT_ROTATE_SPEED;
+int BAT_ROTATE_RADIUS;
+int BAT_SIZE;
 
 void initialize(){
     WINDOW_WIDTH=1300;
@@ -25,7 +28,9 @@ void initialize(){
     DISTANCE =500;
     COIN_INTV_L = 1000;
     COIN_INTV_H = 7000;
-
+    BAT_ROTATE_SPEED=500;
+    BAT_ROTATE_RADIUS=50;
+    BAT_SIZE=100;
 }
 //WINDOW_WIDTH=1300;
 //WINDOW_HEIGHT=800;

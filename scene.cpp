@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "pillaritem.h"
 #include <QDebug>
+#include"bat.h"
 #include "constants.h"
 #include "graphicsbutton.h"
 #include<QRandomGenerator>
@@ -34,7 +35,11 @@ void Scene::start(){
     // called when start_btn is hit
     stopped = false;
     for (auto coin: coins) {
+        if (coin->bat) {
+            removeItem(coin->bat);
+        }
         removeItem(coin);
+        delete coin;
     }
     coins.clear();
     coinTimer->setSingleShot(true);
@@ -68,7 +73,7 @@ void Scene::coinTimeOut() {
 void Scene::addCoin() {
     Coin* coin = new Coin();
     for (auto p: pillars) {
-        if (coin->x() == p->x()) {
+        if (coin->x() < p->x()+GAP_WIDTH/2 && coin->x() > p->x()+GAP_WIDTH/2) {
             delete coin;
             coin = new Coin();
         }
@@ -77,10 +82,20 @@ void Scene::addCoin() {
         auto x=coins.front();
         coins.pop_front();
         removeItem(x);
+        if (x->bat) {
+            removeItem(x->bat);
+        }
+        delete x;
     });
     connect(coin, &Coin::collided_signal, this, &Scene::eatCoin);
+    if (coin->bat) {
+        connect(coin->bat, &Bat::collided_signal, this, &Scene::gameOver);
+    }
     coins.push_back(coin);
     addItem(coin);
+    if (coin->bat) {
+        addItem(coin->bat);
+    }
 }
 
 void Scene::eatCoin() {

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsPixmapItem>
 #include<QPropertyAnimation>
+#include"bat.h"
 
 class Coin : public QObject, public QGraphicsPixmapItem
 {
@@ -16,6 +17,8 @@ public:
     qreal x() const;
     void setX(qreal newX);
     void freeze();
+    Bat* bat;
+    friend class Bat;
 
 signals:
     void xChanged();

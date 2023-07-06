@@ -12,6 +12,9 @@ extern int SPEED;
 extern int DISTANCE;
 extern int COIN_INTV_L;
 extern int COIN_INTV_H;
+extern double BAT_ROTATE_SPEED;
+extern int BAT_ROTATE_RADIUS;
+extern int BAT_SIZE;
 
 void initialize();
 /*extern int WINDOW_WIDTH=1300;

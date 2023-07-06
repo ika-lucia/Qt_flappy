@@ -65,6 +65,14 @@
         <file alias="coin6.png">graphic/coin6.png</file>
         <file alias="coin7.png">graphic/coin7.png</file>
         <file alias="coin8.png">graphic/coin8.png</file>
+        <file alias="bat1.png">graphic/tile000.png</file>
+        <file alias="bat2.png">graphic/tile001.png</file>
+        <file alias="bat3.png">graphic/tile002.png</file>
+        <file alias="bat4.png">graphic/tile003.png</file>
+        <file alias="bat5.png">graphic/tile004.png</file>
+        <file alias="bat6.png">graphic/tile005.png</file>
+        <file alias="bat7.png">graphic/tile006.png</file>
+        <file alias="bat8.png">graphic/tile007.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file alias="die.wav">sound/die.wav</file>

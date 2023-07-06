@@ -27,6 +27,8 @@ set(PROJECT_SOURCES
         pillaritem.cpp
         pillaritem.h
         coin.cpp
+        bat.cpp
+        bat.h
         coin.h
 )
 
