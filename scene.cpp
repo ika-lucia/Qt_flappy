@@ -29,14 +29,18 @@ Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false), score(0),
 
     addBird();
     connect(pillarTimer, &QTimer::timeout, this, &Scene::addNewPillar);
-    coinTimer->setSingleShot(true);
     connect(coinTimer, &QTimer::timeout, this, &Scene::coinTimeOut);
-    coinTimeOut();
 }
 
 void Scene::start(){
     // called when start_btn is hit
     stopped = false;
+    for (auto coin: coins) {
+        removeItem(coin);
+    }
+    coins.clear();
+    coinTimer->setSingleShot(true);
+    coinTimer->start(2000);
     pillarTimer->start(DISTANCE/(double)SPEED * 1000);
     bird->fall();
 }
