@@ -28,7 +28,7 @@ public slots:
 private:
     QGraphicsPixmapItem* qpillarup;
     QGraphicsPixmapItem* qpillardown;
-
+    bool passed;
     int yPos;
     bool collide();
     qreal m_x;

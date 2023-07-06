@@ -1,15 +1,16 @@
 
 #include "pillaritem.h"
 #include <iostream>
+#include "scene.h"
 #include <QRandomGenerator>
 #include <QGraphicsScene>
 #include "bird.h"
 #include "constants.h"
-PillarItem::PillarItem() // pipe_down是开口朝下的，放在上方
+PillarItem::PillarItem():passed(false) // pipe_down是开口朝下的，放在上方
 {
     int gapWidth=GAP_WIDTH;
     int gapHeight=GAP_HEIGHT;
-    QPixmap pm = QPixmap(":/graphics/pipe_down.png");
+    QPixmap pm = QPixmap(":/graphics/pipe_down.png");   
     pm = pm.scaled(QSize(gapWidth,pm.height())); // 增大宽度
     qpillarup = new QGraphicsPixmapItem(pm);
     pm = QPixmap(":/graphics/pipe_up.png");
@@ -73,6 +74,17 @@ void PillarItem::setX(qreal newX)
         return;
     m_x = newX;
     setPos(QPointF(m_x, yPos));
+
+    if(newX < 0 && !passed)
+    {
+        passed = true;
+        QGraphicsScene * mScene = scene();
+        Scene * myScene = dynamic_cast<Scene*>(mScene);
+        if(myScene)
+        {
+            myScene->incrementScore();
+        }
+    }
     if (PillarItem::collide()) {
         emit collided_signal();
     }

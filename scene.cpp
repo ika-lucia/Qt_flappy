@@ -2,7 +2,7 @@
 #include "pillaritem.h"
 #include <QDebug>
 #include "constants.h"
-Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false) {
+Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false), score(0), bestScore(0) {
 //    auto after_scale = QPixmap(":/graphics/background_day.png").scaledToHeight(WINDOW_HEIGHT);
     auto after_scale = QPixmap(":/graphics/background_day.png").scaled(QSize(WINDOW_WIDTH,WINDOW_HEIGHT));
     QGraphicsPixmapItem* background =
@@ -85,19 +85,31 @@ void Scene::gameOver() {
 //        }
 //    }
     auto after_scale = QPixmap(":/graphics/gameOver.png");
+    QGraphicsTextItem * scoreTextItem = new QGraphicsTextItem();
     QGraphicsPixmapItem* gameOverTxt = new QGraphicsPixmapItem(after_scale);
     gameOverTxt->setPos(- QPointF(gameOverTxt->boundingRect().width()/2,
                                   gameOverTxt->boundingRect().height()/2));
+    QString htmlString = "<p> Score : " + QString::number(score) + " </p>" + "<p> Best Score : "
+                         + QString::number(bestScore) + "</p>";
+    QFont mFont("Consolas", 30, QFont::Bold);
+    scoreTextItem->setHtml(htmlString);
+    scoreTextItem->setFont(mFont);
+    scoreTextItem->setDefaultTextColor(Qt::yellow);
+    scoreTextItem->setPos(- QPointF(scoreTextItem->boundingRect().width()/2,
+                                   gameOverTxt->boundingRect().height() * 4));
+    addItem(scoreTextItem);
     addItem(gameOverTxt);
     start_btn->show();
     connect(start_btn,&QPushButton::clicked,[=](){
         start_btn->hide();
         clearAll();
         removeItem(gameOverTxt);
+        removeItem(scoreTextItem);
 //        delete gameOverTxt;
         addBird();
         start();
     });
+    score = 0;
     stopped = true;
 }
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
@@ -105,6 +117,13 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
     qDebug()<< e->pos() << e->screenPos()<<e->scenePos();
 }
 // bird up when pressing space
+void Scene::incrementScore()
+{
+    score++;
+    if(score > bestScore)
+        bestScore = score;
+    qDebug() << "Score:: " << score << "Best Score:: " << bestScore;
+}
 void Scene::keyPressEvent(QKeyEvent* event) {
 
     qDebug() << "Key pressed,stopped="<<stopped;

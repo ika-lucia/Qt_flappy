@@ -20,12 +20,18 @@ public:
     void gameOver();
     void start();
     void stop();
+    void incrementScore();
     void clearAll();
     void keyPressEvent(QKeyEvent* event);
     void mousePressEvent(QGraphicsSceneMouseEvent *e);
     Bird* bird;
     QPushButton* start_btn;
     std::deque<PillarItem*> pillars;
+    int score;
+    int bestScore;
+
+    QGraphicsPixmapItem * gameOverPix;
+    QGraphicsTextItem * scoreTextItem;
 };
 
 #endif
