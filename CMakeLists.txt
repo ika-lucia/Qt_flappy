@@ -21,6 +21,8 @@ set(PROJECT_SOURCES
         scene.h
         bird.cpp
         bird.h
+        graphicsbutton.cpp
+        graphicsbutton.h
         assets/Resource.qrc
         pillaritem.cpp
         pillaritem.h

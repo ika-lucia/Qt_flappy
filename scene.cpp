@@ -2,7 +2,9 @@
 #include "pillaritem.h"
 #include <QDebug>
 #include "constants.h"
+#include "graphicsbutton.h"
 #include<QRandomGenerator>
+#include <QGraphicsPixmapItem>
 Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false), score(0), bestScore(0), coinEarned(0) {
 //    auto after_scale = QPixmap(":/graphics/background_day.png").scaledToHeight(WINDOW_HEIGHT);
     auto after_scale = QPixmap(":/graphics/background_day.png").scaled(QSize(WINDOW_WIDTH,WINDOW_HEIGHT));
@@ -16,16 +18,12 @@ Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false), score(0),
     addLine(0,-WINDOW_HEIGHT,0,WINDOW_HEIGHT,QPen(Qt::blue));
     // when timeout, add a new pillar and start over again
 
+    auto pm = QPixmap(":/graphics/play.png").scaled(QSize(150,90));
+    start_btn =  new GraphicsButton(pm);
+    start_btn->setOffset(QPointF(-75,-45));
+    start_btn->setPos(QPointF(0,WINDOW_HEIGHT*0.15));
+    addItem(start_btn);
 
-    start_btn = new QPushButton((QWidget*)parent);
-    start_btn->resize(60,35);
-    start_btn->move(QPoint(WINDOW_WIDTH/2-30,WINDOW_HEIGHT*0.65-17));
-    start_btn->setText("Start");
-    connect(start_btn,&QPushButton::clicked,[=](){
-        start_btn->hide();
-        start();
-        //scene->startPillarTimer();
-    });
 
     addBird();
     connect(pillarTimer, &QTimer::timeout, this, &Scene::addNewPillar);
@@ -94,8 +92,15 @@ void Scene::addBird() {
     addItem(bird);
 }
 void Scene::clearAll(){
-    removeItem(bird);
-
+    if(bird) {
+        removeItem(bird);
+    }
+    if(gameOverTxt) {
+        removeItem(gameOverTxt);
+    }
+    if(scoreTextItem) {
+        removeItem(scoreTextItem);
+    }
     while(!pillars.empty()){
         PillarItem* p = pillars.front();
         pillars.pop_front();
@@ -126,8 +131,8 @@ void Scene::gameOver() {
 //        }
 //    }
     auto after_scale = QPixmap(":/graphics/gameOver.png");
-    QGraphicsTextItem * scoreTextItem = new QGraphicsTextItem();
-    QGraphicsPixmapItem* gameOverTxt = new QGraphicsPixmapItem(after_scale);
+    scoreTextItem = new QGraphicsTextItem();
+    gameOverTxt = new QGraphicsPixmapItem(after_scale);
     gameOverTxt->setPos(- QPointF(gameOverTxt->boundingRect().width()/2,
                                   gameOverTxt->boundingRect().height()/2));
     QString htmlString = "<p> Score : " + QString::number(score) + " </p>" + "<p> Best Score : "
@@ -141,22 +146,19 @@ void Scene::gameOver() {
     addItem(scoreTextItem);
     addItem(gameOverTxt);
     start_btn->show();
-    connect(start_btn,&QPushButton::clicked,[=](){
-        start_btn->hide();
-        clearAll();
-        removeItem(gameOverTxt);
-        removeItem(scoreTextItem);
-//        delete gameOverTxt;
-        addBird();
-        start();
-    });
     score = 0;
     stopped = true;
 }
-void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
-{ // used for testing
-    qDebug()<< e->pos() << e->screenPos()<<e->scenePos();
+void Scene::restart(){
+    start_btn->hide();
+    clearAll();
+    addBird();
+    start();
 }
+//void Scene::mousePressEvent(QGraphicsSceneMouseEvent *e)
+//{ // used for testing
+//    qDebug()<< e->pos() << e->screenPos()<<e->scenePos();
+//}
 // bird up when pressing space
 void Scene::incrementScore()
 {

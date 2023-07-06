@@ -9,6 +9,7 @@
 #include <deque>
 #include <QPushButton>
 #include "pillaritem.h"
+#include "graphicsbutton.h"
 class Scene: public QGraphicsScene {
     Q_OBJECT
 public:
@@ -23,20 +24,22 @@ public:
     void eatCoin();
     void gameOver();
     void start();
+    void restart();
     void stop();
     void incrementScore();
     void clearAll();
     void keyPressEvent(QKeyEvent* event);
-    void mousePressEvent(QGraphicsSceneMouseEvent *e);
-    Bird* bird;
-    QPushButton* start_btn;
+    Bird* bird=0;
+    GraphicsButton* start_btn;
+//    QGraphicsPixmapItem* start_btn;
     std::deque<PillarItem*> pillars;
     std::deque<Coin*> coins;
     int score;
     int bestScore;
     int coinEarned;
-    QGraphicsPixmapItem * gameOverPix;
-    QGraphicsTextItem * scoreTextItem;
+    QGraphicsPixmapItem * gameOverPix=0;
+    QGraphicsPixmapItem* gameOverTxt=0;
+    QGraphicsTextItem * scoreTextItem=0;
 private:
     void coinTimeOut();
 };
