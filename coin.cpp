@@ -4,6 +4,7 @@
 #include "constants.h"
 #include <QRandomGenerator>
 #include <QTimer>
+#include<QtMath>
 
 Coin::Coin()
     : allPixmaps {
@@ -15,9 +16,9 @@ Coin::Coin()
         QPixmap(":/graphics/coin6.png"),
         QPixmap(":/graphics/coin7.png"),
         QPixmap(":/graphics/coin8.png"),
-    }, curPos(0)
+    }, curPos(0), bat(nullptr)
 {
-
+    // animate by updating pixmap
     setPixmap(allPixmaps[curPos]);
     QTimer * coinRotateTimer = new QTimer(this);
     connect(coinRotateTimer, &QTimer::timeout,
@@ -27,10 +28,8 @@ Coin::Coin()
     coinRotateTimer->start(80);
 
     m_y = QRandomGenerator::global()->bounded(-RANGE_Y,RANGE_Y);
-    int xPos = QRandomGenerator::global()->bounded(-RANGE_X,RANGE_X);
-    int width = boundingRect().width();
-    int start = WINDOW_WIDTH+xPos+width/2;
-    int end = -WINDOW_WIDTH-width/2;
+    int start = WINDOW_WIDTH;
+    int end = -WINDOW_WIDTH;
     // begin animation
     xAnimation = new QPropertyAnimation(this,"x",this);
     xAnimation->setStartValue(start);
@@ -38,6 +37,11 @@ Coin::Coin()
     xAnimation->setEasingCurve(QEasingCurve::Linear);
     xAnimation->setDuration((start-end)/(double)SPEED*1000);
     xAnimation->start();
+    // generate a bat surrounding it with a chance of 60%
+    double a = QRandomGenerator::global()->generateDouble();
+    if (a < 0.6) {
+        bat = new Bat(m_y);
+    }
 }
 
 void Coin::updatePixmap() {
@@ -62,6 +66,7 @@ void Coin::collide() {
 
 Coin::~Coin() {
     delete xAnimation;
+    delete bat;
 }
 
 qreal Coin::x() const {
