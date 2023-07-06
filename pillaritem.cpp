@@ -27,7 +27,7 @@ PillarItem::PillarItem():passed(false) // pipe_down是开口朝下的，放在�
     addToGroup(qpillarup);
     addToGroup(qpillardown);
     //random y position
-    yPos = -75+QRandomGenerator::global()->bounded(-RANGE_Y,RANGE_Y);
+    yPos = QRandomGenerator::global()->bounded(-RANGE_Y,RANGE_Y);
     int xPos = QRandomGenerator::global()->bounded(-RANGE_X,RANGE_X);
 
     int start = WINDOW_WIDTH+xPos+width/2;

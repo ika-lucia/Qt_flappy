@@ -24,6 +24,8 @@ set(PROJECT_SOURCES
         assets/Resource.qrc
         pillaritem.cpp
         pillaritem.h
+        coin.cpp
+        coin.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

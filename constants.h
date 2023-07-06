@@ -10,6 +10,8 @@ extern int GAP_WIDTH;
 extern int GAP_HEIGHT;
 extern int SPEED;
 extern int DISTANCE;
+extern int COIN_INTV_L;
+extern int COIN_INTV_H;
 void initialize();
 /*extern int WINDOW_WIDTH=1300;
 extern int WINDOW_HEIGHT=800;

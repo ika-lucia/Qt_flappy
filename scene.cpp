@@ -2,7 +2,8 @@
 #include "pillaritem.h"
 #include <QDebug>
 #include "constants.h"
-Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false), score(0), bestScore(0) {
+#include<QRandomGenerator>
+Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false), score(0), bestScore(0), coinEarned(0) {
 //    auto after_scale = QPixmap(":/graphics/background_day.png").scaledToHeight(WINDOW_HEIGHT);
     auto after_scale = QPixmap(":/graphics/background_day.png").scaled(QSize(WINDOW_WIDTH,WINDOW_HEIGHT));
     QGraphicsPixmapItem* background =
@@ -28,8 +29,11 @@ Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false), score(0),
 
     addBird();
     connect(pillarTimer, &QTimer::timeout, this, &Scene::addNewPillar);
-
+    coinTimer->setSingleShot(true);
+    connect(coinTimer, &QTimer::timeout, this, &Scene::coinTimeOut);
+    coinTimeOut();
 }
+
 void Scene::start(){
     // called when start_btn is hit
     stopped = false;
@@ -47,10 +51,38 @@ void Scene::addNewPillar() {
         auto x=pillars.front();
         pillars.pop_front();
         removeItem(x);
-//        delete x;
     });
     connect(p, &PillarItem::collided_signal, this, &Scene::gameOver);
     addItem(p);
+}
+
+void Scene::coinTimeOut() {
+    int randomInterval = QRandomGenerator::global()->bounded(COIN_INTV_L, COIN_INTV_H);
+    addCoin();
+    coinTimer->setSingleShot(true);
+    coinTimer->start(randomInterval);
+}
+
+void Scene::addCoin() {
+    Coin* coin = new Coin();
+    for (auto p: pillars) {
+        if (coin->x() == p->x()) {
+            delete coin;
+            coin = new Coin();
+        }
+    }
+    connect(coin->xAnimation, &QPropertyAnimation::finished, [=](){
+        auto x=coins.front();
+        coins.pop_front();
+        removeItem(x);
+    });
+    connect(coin, &Coin::collided_signal, this, &Scene::eatCoin);
+    coins.push_back(coin);
+    addItem(coin);
+}
+
+void Scene::eatCoin() {
+    coinEarned++;
 }
 
 void Scene::addBird() {
@@ -73,9 +105,14 @@ void Scene::gameOver() {
     bird->failFall();
     // stop pillar generation
     pillarTimer->stop();
+    // stop generating new coins
+    coinTimer->stop();
     // freeze all pillars
     for(auto pillar: pillars){
         pillar->freeze();
+    }
+    for (auto coin: coins) {
+        coin->freeze();
     }
 //    auto all = items();
 //    for (auto i: all) {

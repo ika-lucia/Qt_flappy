@@ -4,6 +4,7 @@
 #include<QTimer>
 #include<QKeyEvent>
 #include"bird.h"
+#include"coin.h"
 #include <QGraphicsSceneMouseEvent>
 #include <deque>
 #include <QPushButton>
@@ -15,8 +16,11 @@ public:
     explicit Scene(QObject *parent = nullptr);
     bool stopped;
     QTimer* pillarTimer = new QTimer(this);
+    QTimer* coinTimer = new QTimer(this);
     void addNewPillar();
     void addBird();
+    void addCoin();
+    void eatCoin();
     void gameOver();
     void start();
     void stop();
@@ -27,11 +31,14 @@ public:
     Bird* bird;
     QPushButton* start_btn;
     std::deque<PillarItem*> pillars;
+    std::deque<Coin*> coins;
     int score;
     int bestScore;
-
+    int coinEarned;
     QGraphicsPixmapItem * gameOverPix;
     QGraphicsTextItem * scoreTextItem;
+private:
+    void coinTimeOut();
 };
 
 #endif
