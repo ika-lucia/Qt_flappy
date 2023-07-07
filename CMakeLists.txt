@@ -30,6 +30,8 @@ set(PROJECT_SOURCES
         bat.cpp
         bat.h
         coin.h
+        popupdialog.h
+        popupdialog.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
