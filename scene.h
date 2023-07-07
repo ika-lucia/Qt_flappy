@@ -30,8 +30,8 @@ public:
     void clearAll();
     void keyPressEvent(QKeyEvent* event);
     Bird* bird=0;
-    GraphicsButton* start_btn;
-//    QGraphicsPixmapItem* start_btn;
+    StartButton* start_btn;
+    MenuButton* menu_btn;
     std::deque<PillarItem*> pillars;
     std::deque<Coin*> coins;
     int score;

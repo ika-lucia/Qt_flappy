@@ -19,12 +19,17 @@ Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false), score(0),
     addLine(0,-WINDOW_HEIGHT,0,WINDOW_HEIGHT,QPen(Qt::blue));
     // when timeout, add a new pillar and start over again
 
-    auto pm = QPixmap(":/graphics/play.png").scaled(QSize(150,90));
-    start_btn =  new GraphicsButton(pm);
-    start_btn->setOffset(QPointF(-75,-45));
+    auto startPm = QPixmap(":/graphics/play.png").scaled(QSize(100,60));
+    start_btn =  new StartButton(startPm);
+    start_btn->setOffset(QPointF(-50,-30));
     start_btn->setPos(QPointF(0,WINDOW_HEIGHT*0.15));
+    connect(start_btn, &StartButton::gameStartSignal, this, &Scene::restart);
     addItem(start_btn);
-
+    auto menuPm = QPixmap(":/graphics/menu.png").scaled(QSize(100,60));
+    menu_btn = new MenuButton(menuPm);
+    menu_btn->setOffset(QPointF(-50,-30));
+    menu_btn->setPos(QPointF(0,WINDOW_HEIGHT*0.25));
+    addItem(menu_btn);
 
     addBird();
     connect(pillarTimer, &QTimer::timeout, this, &Scene::addNewPillar);
@@ -138,13 +143,7 @@ void Scene::gameOver() {
     for (auto coin: coins) {
         coin->freeze();
     }
-//    auto all = items();
-//    for (auto i: all) {
-//        PillarItem* pil = dynamic_cast<PillarItem*>(i);
-//        if (pil) {
-//            pil->freeze();
-//        }
-//    }
+
     auto after_scale = QPixmap(":/graphics/gameOver.png");
     scoreTextItem = new QGraphicsTextItem();
     gameOverTxt = new QGraphicsPixmapItem(after_scale);
@@ -161,11 +160,13 @@ void Scene::gameOver() {
     addItem(scoreTextItem);
     addItem(gameOverTxt);
     start_btn->show();
+    menu_btn->show();
     score = 0;
     stopped = true;
 }
 void Scene::restart(){
     start_btn->hide();
+    menu_btn->hide();
     clearAll();
     addBird();
     start();

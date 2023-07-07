@@ -22,6 +22,7 @@ Widget::Widget(QWidget *parent)
                         WINDOW_WIDTH, WINDOW_HEIGHT);
     ui->graphicsView->setScene(scene);
     connect(popupDlg, &PopupDialog::accepted, this, &Widget::onPopupAccepted);
+    connect(scene->menu_btn, &MenuButton::menuPopupSignal, popupDlg, &PopupDialog::show);
 }
 
 Widget::~Widget()
