@@ -15,9 +15,9 @@ Scene::Scene(QObject *parent): QGraphicsScene(parent), stopped(false), score(0),
     background->setPos( - QPointF(WINDOW_WIDTH/2,
                         WINDOW_HEIGHT/2));
     addItem(background);
-//    addLine(-WINDOW_WIDTH,0,WINDOW_WIDTH,0,QPen(Qt::blue));
-//    addLine(0,-WINDOW_HEIGHT,0,WINDOW_HEIGHT,QPen(Qt::blue));
-//    // when timeout, add a new pillar and start over again
+
+    //addLine(-WINDOW_WIDTH,0,WINDOW_WIDTH,0,QPen(Qt::blue));
+    //addLine(0,-WINDOW_HEIGHT,0,WINDOW_HEIGHT,QPen(Qt::blue));
 
     auto startPm = QPixmap(":/graphics/play.png").scaled(QSize(100,60));
     start_btn =  new StartButton(startPm);
